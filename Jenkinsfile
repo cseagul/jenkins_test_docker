@@ -13,7 +13,7 @@ pipeline {
                     $class: 'GitSCM',
                     branches: [[name: '*/main']],
                     userRemoteConfigs: [[
-                        url: 'https://github.com/youruser/yourrepo.git',
+                        url: 'https://github.com/cseagul/jenkins_test_docker.git',
                         credentialsId: 'github-creds'
                     ]]
                 ])
@@ -32,7 +32,7 @@ pipeline {
                 sh '''
                     docker rm -f ${CONTAINER_NAME} || true
                     docker run -d \
-                        --name ${CONTAINER_NAME} \
+                        --name /Users/chaim/Documents/devops-course/jenkins/jenkins_test_docker/${CONTAINER_NAME} \
                         -p 8080:8080 \
                         ${IMAGE_NAME}
                 '''
