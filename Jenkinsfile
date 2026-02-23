@@ -18,7 +18,7 @@ pipeline {
                     ]]
                 ])
             }
-
+        }
         stage('Build Docker Image') {
             steps {
                 script {
@@ -27,7 +27,7 @@ pipeline {
             }
         }
 
-         stage('Run Container') {
+        stage('Run Container') {
             steps {
                 sh '''
                     docker rm -f ${CONTAINER_NAME} || true
@@ -37,6 +37,11 @@ pipeline {
                         ${IMAGE_NAME}
                 '''
             }
-         }
+        }
+    }
+    post {
+        failure {
+            echo "Build failed."
+        }
     }
 }
