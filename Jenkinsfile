@@ -1,7 +1,7 @@
 pipeline {
     agent any
 
-    envionment {
+    environment {
         DOCKER_IMAGE = 'playwright-app:latest'
         SHORT_SHA = "${env.GIT_COMMIT[0..6]}"
         DOCKER_TAG = "${DOCKER_IMAGE}-${SHORT_SHA}"
