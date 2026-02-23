@@ -37,5 +37,6 @@ pipeline {
                         ${IMAGE_NAME}
                 '''
             }
+         }
     }
 }
