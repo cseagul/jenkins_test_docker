@@ -7,18 +7,7 @@ pipeline {
         DOCKER_TAG = "${DOCKER_IMAGE}-${SHORT_SHA}"
     }
     stages {
-        stage('Checkout') {
-            steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[
-                        url: 'https://github.com/cseagul/jenkins_test_docker.git',
-                        credentialsId: 'github-creds'
-                    ]]
-                ])
-            }
-        }
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -31,10 +20,7 @@ pipeline {
             steps {
                 sh '''
                     docker rm -f ${CONTAINER_NAME} || true
-                    docker run -d \
-                        --name /Users/chaim/Documents/devops-course/jenkins/jenkins_test_docker/${CONTAINER_NAME} \
-                        -p 8080:8080 \
-                        ${IMAGE_NAME}
+                    docker run -d -p 8080:8080 ${IMAGE_NAME}
                 '''
             }
         }
