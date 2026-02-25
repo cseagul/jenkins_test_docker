@@ -2,8 +2,15 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(
+            name: 'IMAGE_NAME', 
+            choices: ['playwright-app', 'playwright-app2'], 
+            description: 'Select the Docker image name to build and run'
+        )
+    }
+
     environment {
-        IMAGE_NAME = 'playwright-app'
         SHORT_SHA = "${env.GIT_COMMIT[0..6]}"
         DOCKER_TAG = "${IMAGE_NAME}-${SHORT_SHA}"
     }
