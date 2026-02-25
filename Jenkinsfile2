@@ -11,15 +11,16 @@ pipeline {
     }
 
     environment {
-        SHORT_SHA = "${env.GIT_COMMIT[0..6]}"
-        DOCKER_TAG = "${IMAGE_NAME}-${SHORT_SHA}"
+        DOCKERHUB_USERNAME = "chaimsiegel"
+        DOCKER_TAG = "${env.GIT_COMMIT[0..6]}"
+        FULL_IMAGE_NAME = "${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${DOCKER_TAG}"
     }
     stages {
 
         stage('Build Docker Image') {
             steps {
                 script {
-                     sh "docker build -t ${DOCKER_TAG} ."
+                     sh "docker build -t ${FULL_IMAGE_NAME} ./${IMAGE_NAME}"
                 }
             }
         }
@@ -27,8 +28,8 @@ pipeline {
         stage('Run Container') {
             steps {
                 sh '''
-                    docker rm -f ${IMAGE_NAME} || true
-                    docker run -d -p 8080:8080 ${IMAGE_NAME}
+                    docker rm -f ${FULL_IMAGE_NAME} || true
+                    docker run -p 8080:8080 ${FULL_IMAGE_NAME}
                 '''
             }
         }
