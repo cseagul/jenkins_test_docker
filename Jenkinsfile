@@ -1,12 +1,20 @@
 pipeline {
     agent any
 
+    parameters {
+        choice(
+            name: 'IMAGE_NAME', 
+            choices: ['playwright-app', 'playwright-app2'], 
+            description: 'Select the Docker image name to build and run'
+        )
+    }
+
     environment {
         DOCKERHUB_USERNAME = "chaimsiegel"
-        IMAGE_NAME = 'playwright-app'
         DOCKER_TAG = "${env.GIT_COMMIT[0..6]}"
         FULL_IMAGE_NAME = "${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${DOCKER_TAG}"
     }
+
     stages {
 
         stage('Build Docker Image') {
@@ -17,14 +25,6 @@ pipeline {
             }
         }
 
-        // stage('Run Container') {
-        //     steps {
-        //         sh '''
-        //             docker rm -f ${IMAGE_NAME} || true
-        //             docker run -d -p 8080:8080 ${IMAGE_NAME}
-        //         '''
-        //     }
-        // }
         stage('Login to DockerHub') {
             steps {
                 withCredentials([usernamePassword(

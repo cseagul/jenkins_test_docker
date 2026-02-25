@@ -15,6 +15,7 @@ pipeline {
         DOCKER_TAG = "${env.GIT_COMMIT[0..6]}"
         FULL_IMAGE_NAME = "${DOCKERHUB_USERNAME}/${IMAGE_NAME}:${DOCKER_TAG}"
     }
+    
     stages {
 
         stage('Build Docker Image') {
