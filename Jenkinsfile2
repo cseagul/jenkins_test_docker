@@ -1,0 +1,34 @@
+// build and run a Docker container for the Playwright app (on github), tagging the image with a short Git commit hash for versioning.
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'playwright-app'
+        SHORT_SHA = "${env.GIT_COMMIT[0..6]}"
+        DOCKER_TAG = "${IMAGE_NAME}-${SHORT_SHA}"
+    }
+    stages {
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                     sh "docker build -t ${DOCKER_TAG} ."
+                }
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh '''
+                    docker rm -f ${IMAGE_NAME} || true
+                    docker run -d -p 8080:8080 ${IMAGE_NAME}
+                '''
+            }
+        }
+    }
+    post {
+        failure {
+            echo "Build failed."
+        }
+    }
+}
