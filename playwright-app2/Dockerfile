@@ -13,4 +13,4 @@ COPY . .
 
 # 5. Run the script
 ENTRYPOINT [ "python" ]
-CMD ["main.py"]
+CMD ["main2.py"]
